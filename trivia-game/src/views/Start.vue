@@ -1,8 +1,8 @@
 <script setup>
-    import LoginRegister from '../components/LoginRegister.vue';
+    import Startup from '../components/Startup.vue';
 
 </script>
 
 <template>
-    <LoginRegister />
+    <Startup />
 </template>
