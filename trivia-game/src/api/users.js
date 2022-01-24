@@ -1,10 +1,10 @@
-const api_URL = "https://druwan-noroff-api.heroku.com";
+const apiURL = "https://druwan-noroff-api.herokuapp.com"
 const apiKey = "wvFWtgXenkKtZhzYRH7Vmg=="
 
 
 export async function apiGetAllUsers() {
     try {
-        const response = await fetch(`${api_URL}/trivia`)
+        const response = await fetch(`${apiURL}`)
 
         if(!response.ok) {
             throw new Error("Could not find users 🤔")
@@ -21,10 +21,10 @@ export async function apiGetAllUsers() {
 }
 
 
-// Exporting to Noroff API
+// Post to Noroff API
 export async function apiUserRegister(username) {
     try {
-        const response = await fetch(`${api_URL}/trivia`, {
+        const response = await fetch(`${apiURL}/trivia`, {
             method: "POST",
             headers: {
                 "X-API-Key": apiKey,
@@ -39,6 +39,7 @@ export async function apiUserRegister(username) {
             if(!response.ok) {
                 throw new Error("Could not create new user")
             }
+            console.log(response.json())
             return response.json()
         })
         .then(newUser => {
@@ -55,7 +56,7 @@ export async function apiUserRegister(username) {
 
 export async function apiUpdateUserScore(userId, newhighScore) {
     try {
-        const response = await fetch(`${api_URL}/trivia`, {
+        const response = await fetch(`${apiURL}/trivia/${userId}`, {
             method: "PATCH",
             headers: {
                 "X-API-Key": apiKey,
