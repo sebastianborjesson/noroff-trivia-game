@@ -1,5 +1,5 @@
-const api_URL = "Noroff URL"
-const apiKey = "your-public-api-key-goes-here"
+const api_URL = "https://druwan-noroff-api.herokuapp.com/"
+const apiKey = "wvFWtgXenkKtZhzYRH7Vmg=="
 
 // Exporting to Noroff API
 export async function apiUserRegister(username) {
