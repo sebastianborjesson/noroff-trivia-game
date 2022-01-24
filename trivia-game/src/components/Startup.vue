@@ -1,15 +1,29 @@
 <script setup>
-    import { onMounted, defineProps, ref } from "vue";
+    import { computed, ref } from "vue";
     import { useStore } from "vuex"
 
-    // const getCategories = async function () {
-    //     await fetch("https://opentdb.com/api_category.php")
-    //         .then(async (response) => {
-    //             const results = await response.json();
-    //         })
-    // }
+    const store = useStore()
 
     const username = ref("")
+    const categories = computed(() => store.state.categories)
+    const selectedCategory = ref("any")
+
+
+    const storedCategories = ref([])
+    store.subscribe((mutation,state)=>{
+        storedCategories.value = state.categories;
+        console.log(storedCategories.value);
+    })
+
+    function selectedCategoryInList() {
+        console.log(selectedCategory.value)
+        // Want to use this value to set the category ID
+    }
+
+
+    function onStart() {
+
+    }
     
 </script>
 
@@ -28,15 +42,15 @@
                 <input type="number" name="trivia_amount" id="trivia_amount">
             </fieldset>
             
-            <!-- <fieldset>
-                <label for="trivia_category">Select Category: </label>
-                <select name="trivia_category" v-model="trivia_category">
-                    <option v-for="trivia_category in result" :key="trivia_category.id" :value="trivia_category.name">
-                        {{ trivia_category.name }}
+            <fieldset>
+                <label for="categories">Select Category: </label>
+                <select name="categories" v-model="selectedCategory" @change="selectedCategoryInList">
+                    <option v-for="category in storedCategories" :key="category.id" :value="category.id">
+                        {{ category.name }}
                     </option>
                 </select>
-            </fieldset> -->
-            
+            </fieldset>
+
             <fieldset>
                 <label for="difficulty">Select Difficulty: </label>
                 <select name="trivia_difficulty" class="form-control">
@@ -47,7 +61,9 @@
                 </select>
             </fieldset>
             
-            <button type="submit">STARTUUUUU</button>
+            <button type="submit" @click="onStart">STARTUURUUU</button>
         </form>
     </main>
 </template>
+
+<style scoped></style>
