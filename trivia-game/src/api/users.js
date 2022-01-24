@@ -1,5 +1,33 @@
-const api_URL = "Noroff URL"
-const apiKey = "your-public-api-key-goes-here"
+const api_URL = "https://druwan-noroff-api.heroku.com";
+const apiKey = "wvFWtgXenkKtZhzYRH7Vmg=="
+
+
+export async function apiGetAllUsers() {
+    try {
+        const response = await fetch(`${api_URL}/trivia`)
+
+        if(!response.ok) {
+            throw new Error("Could not find users 🤔")
+        }
+        const { success, data, error = "Could not fetch users 🤔"} = await response.json()
+
+        if(!success) {
+            throw new Error(error)
+        }
+        return [ loggedUsers, null ]
+    } catch (error) {
+        return [ [], error.message]
+    }
+}
+
+
+
+
+
+
+
+
+
 
 // Exporting to Noroff API
 export async function apiUserRegister(username) {
