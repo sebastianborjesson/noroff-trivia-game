@@ -1,41 +1,70 @@
 <script setup>
-    import { onMounted, defineProps, ref } from "vue";
+    import { ref } from "vue";
     import { useStore } from "vuex"
 
-    // const getCategories = async function () {
-    //     await fetch("https://opentdb.com/api_category.php")
-    //         .then(async (response) => {
-    //             const results = await response.json();
-    //         })
-    // }
-
+    const store = useStore();
+    const displayError = ref("")
     const username = ref("")
-    
+    const selectedCategory = ref("")
+    const trivia_difficulty = ref("")
+    const trivia_amount = ref("")
+
+    const storedCategories = ref([])
+    store.subscribe((mutation, state) => {
+        storedCategories.value = state.categories
+    })
+
+    function selectedCategoryInList() {
+        //console.log(selectedCategory.value)
+        // want to use this value to set category id
+        return selectedCategory.value
+    }
+
+    function onStart(){
+        console.log(username.value, trivia_amount.value, selectedCategory.value, trivia_difficulty.value)
+        // add check here if the username already exists
+    }
+
+    const onRegisterSubmit = async () => {
+        await store.dispatch("registerUser", { username })
+    }    
 </script>
 
 <template>
-    <main>
-        <h1 class="font-bold text-4xl">123 Fanta och rosé</h1>
-
-        <form @submit.prevent="onSubmit" class="flex items-center justify-between">
-            <fieldset>
+    <header>
+        <h1 class="font-bold text-4xl flex justify-center pt-5">Triva Quiz</h1>
+    </header>
+    
+    <div class="container flex justify-evenly">
+        <form class="ml-3">
+            <fieldset class="mb-3">
                 <label for="username" aria-label="Username" class="block">Username</label>
-                <input type="text" id="username" v-model="username" />
+                <input type="text" id="username" v-model="username" class="border border-slate-300"/>
             </fieldset>
+        </form>
+        <button @click="onRegisterSubmit" type="submit" class="bg-indigo-500 text-white p-3 rounded">Enter Quiz Setup</button>
+    </div>
+    <div v-if="displayError" class="bg-red-500 text-white p-3 rounded">
+        <span class="text-lg block mb-3">Error:</span>
+        <p>{{ displayError }}</p>
+    </div>
 
+    <div class="container flex justify-evenly">
+        <form @submit.prevent="onSubmit" class="flex items-center justify-between">
+            
             <fieldset>
                 <label for="trivia_amount">Number of Questions:</label>
-                <input type="number" name="trivia_amount" id="trivia_amount">
+                <input type="number" name="trivia_amount" id="trivia_amount" v-model="trivia_amount" class="border border-slate-300">
             </fieldset>
             
-            <!-- <fieldset>
-                <label for="trivia_category">Select Category: </label>
-                <select name="trivia_category" v-model="trivia_category">
-                    <option v-for="trivia_category in result" :key="trivia_category.id" :value="trivia_category.name">
-                        {{ trivia_category.name }}
+            <fieldset>
+                <label for="categories">Select Category: </label>
+                <select name="categories" v-model="selectedCategory" @change="selectedCategoryInList">
+                    <option v-for="category in storedCategories" :key="category.id" :value="category.id">
+                        {{ category.name }}
                     </option>
                 </select>
-            </fieldset> -->
+            </fieldset>
             
             <fieldset>
                 <label for="difficulty">Select Difficulty: </label>
@@ -46,8 +75,9 @@
                     <option value="hard">Hard</option>
                 </select>
             </fieldset>
-            
+        
             <button type="submit">STARTUUUUU</button>
         </form>
-    </main>
+        <button type="submit" @click="onStart" class="bg-indigo-500 text-white p-3 rounded">Start Game</button>
+    </div>        
 </template>
