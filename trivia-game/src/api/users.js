@@ -21,14 +21,6 @@ export async function apiGetAllUsers() {
 }
 
 
-
-
-
-
-
-
-
-
 // Exporting to Noroff API
 export async function apiUserRegister(username) {
     try {
@@ -39,7 +31,7 @@ export async function apiUserRegister(username) {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                username: username,
+                username: username.username.value,
                 highScore: 0
             })
         })
@@ -50,12 +42,7 @@ export async function apiUserRegister(username) {
             return response.json()
         })
         .then(newUser => {
-            //newUser is the new user with an id
-            // newUser = {
-            //     id,
-            //     username,
-            //     highScore
-            // }
+            console.log(newUser)
         })
     } catch (error) {
         return error.message

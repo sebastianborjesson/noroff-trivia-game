@@ -4,18 +4,20 @@
 
     const store = useStore();
     const displayError = ref("")
+
     const username = ref("")
     const selectedCategory = ref("")
     const trivia_difficulty = ref("")
     const trivia_amount = ref("")
 
+
     const storedCategories = ref([])
     store.subscribe((mutation, state) => {
-        storedCategories.value = state.categories
+        storedCategories.value = state.categories;
     })
 
     function selectedCategoryInList() {
-        //console.log(selectedCategory.value)
+        // console.log(selectedCategory.value)
         // want to use this value to set category id
         return selectedCategory.value
     }
@@ -39,11 +41,13 @@
         <form class="ml-3">
             <fieldset class="mb-3">
                 <label for="username" aria-label="Username" class="block">Username</label>
-                <input type="text" id="username" v-model="username" class="border border-slate-300"/>
+                <input type="text" id="trivia_username" v-model="username" class="border border-slate-300"/>
             </fieldset>
         </form>
+        <!-- Check if Username is available -->
         <button @click="onRegisterSubmit" type="submit" class="bg-indigo-500 text-white p-3 rounded">Enter Quiz Setup</button>
     </div>
+
     <div v-if="displayError" class="bg-red-500 text-white p-3 rounded">
         <span class="text-lg block mb-3">Error:</span>
         <p>{{ displayError }}</p>
@@ -59,7 +63,7 @@
             
             <fieldset>
                 <label for="categories">Select Category: </label>
-                <select name="categories" v-model="selectedCategory" @change="selectedCategoryInList">
+                <select name="categories" v-model="selectedCategory" @change="selectedCategoryInList" class="border border-slate-300">
                     <option v-for="category in storedCategories" :key="category.id" :value="category.id">
                         {{ category.name }}
                     </option>
@@ -68,16 +72,16 @@
             
             <fieldset>
                 <label for="difficulty">Select Difficulty: </label>
-                <select name="trivia_difficulty" class="form-control">
+                <select name="trivia_difficulty" class="border border-slate-300" v-model="trivia_difficulty">
                     <option value="any">Any Difficulty</option>
                     <option value="easy">Easy</option>
                     <option value="medium">Medium</option>
                     <option value="hard">Hard</option>
                 </select>
             </fieldset>
-        
-            <button type="submit">STARTUUUUU</button>
         </form>
-        <button type="submit" @click="onStart" class="bg-indigo-500 text-white p-3 rounded">Start Game</button>
-    </div>        
+        <div>
+            <button type="submit" @click="onStart" class="bg-indigo-500 text-white p-3 rounded">Start Game</button>
+        </div>
+    </div>      
 </template>

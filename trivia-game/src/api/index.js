@@ -5,7 +5,7 @@ export async function apiFetchAllCategories() {
     try {
         const response = await fetch(`${CATEGORY_URL}`);
 
-        if (!response.not) {
+        if (!response.ok) {
             throw new Error("Could not find categories 🤔");
         }
         const data = await response.json();
