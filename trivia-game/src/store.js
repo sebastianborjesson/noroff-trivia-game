@@ -21,15 +21,22 @@ export default createStore({
         question_diffuculty: "",
         numberOfQuestion: "",
         questions: [],
-        currentQuestion: 0,
+        currentQuestion: {
+            question: '',
+            questionNumber: 0,
+            answers: []
+        },
     },
     getters: {
-        currentQuestion: state => {
-            return state.currentQuestion;
+        currentQuestionNumber: state => {
+            return state.currentQuestionNumber;
         },
         getQuestions: (state) => {
             return state.questions;
-        }
+        },
+        getCurrentQuestion: (state) => {
+            return state.currentQuestion
+        },
     },
     mutations: {
         setUser: (state, user) => {
@@ -46,23 +53,21 @@ export default createStore({
             state.setSingleUser = setSingleUser
         },
         setQuestions: (state, results) => {
-            state.questions = results.map((question, index) => {
-            question.id = index + 1;
-            // create a property and combine the correct and false answers to the object
-            question.answers = [ question.correct_answer, ...question.incorrect_answers ];
-                /* Shuffle question.answers array */
-                for (let i = question.answers.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [question.answers[i], question.answers[j]] = [
-                        question.answers[j],
-                        question.answers[i],
-                    ];
-                }
-                return question;
-            })
+            state.questions = results
         },
-        incrementRound: (state) => {
-            state.currentQuestion += 1;
+        setCurrentQuestion: (state, questionNumber) => {
+            state.currentQuestion.question = state.questions[questionNumber[0]].question;
+            state.currentQuestion.questionNumber = questionNumber[0];
+
+            // Combine answers to one array and randomize where they populate
+            let answers = [];
+            answers = [ state.questions[questionNumber[0]].correct_answer, ...state.questions[questionNumber[0]].incorrect_answers ];
+            for (let i = answers.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [ answers[i], answers[j] ] = [ answers[j], answers[i] ];
+            }
+
+            state.currentQuestion.answers = answers;
         },
     },
     
@@ -120,6 +125,7 @@ export default createStore({
             }
             
             commit("setQuestions", results);
+            commit("setCurrentQuestion", [0])
             return null;
         },
     }
