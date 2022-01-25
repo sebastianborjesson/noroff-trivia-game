@@ -24,6 +24,12 @@ export default createStore({
         currentQuestion: 0,
     },
     getters: {
+        currentQuestion: state => {
+            return state.currentQuestion;
+        },
+        getQuestions: (state) => {
+            return state.questions;
+        }
     },
     mutations: {
         setUser: (state, user) => {
@@ -40,7 +46,8 @@ export default createStore({
             state.setSingleUser = setSingleUser
         },
         setQuestions: (state, results) => {
-            state.questions = results.map((question) => {
+            state.questions = results.map((question, index) => {
+            question.id = index + 1;
             // create a property and combine the correct and false answers to the object
             question.answers = [ question.correct_answer, ...question.incorrect_answers ];
                 /* Shuffle question.answers array */
@@ -56,13 +63,9 @@ export default createStore({
         },
         incrementRound: (state) => {
             state.currentQuestion += 1;
-          },
-    },
-    getters: {
-        currentQuestion: state => {
-            return state.currentQuestion;
         },
     },
+    
     actions: {
         async fetchAllCategories({ commit }) {
             const [ error, categories ] = await apiFetchAllCategories()
