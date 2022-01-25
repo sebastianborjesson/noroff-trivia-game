@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
 import { apiFetchAllCategories } from "./api/index";
 import { apiGetAllUsers, apiGetSingleUser, apiUserRegister } from "./api/users"
+import { apiFetchQuestions } from "./api/questions";
 
 const initUser = () => {
     const storedUser = localStorage.getItem("trivia-user")
@@ -9,6 +10,7 @@ const initUser = () => {
     }
     return JSON.parse(storedUser)
 }
+n
 
 
 export default createStore({
@@ -19,6 +21,8 @@ export default createStore({
         setSingleUser: "",                 
         question_diffuculty: "",
         numberOfQuestion: "",
+        questions: [],
+        currentQuestion: 0,
     },
     getters: {
     },
@@ -35,7 +39,30 @@ export default createStore({
         },
         setSingleUser: (state, setSingleUser) => {
             state.setSingleUser = setSingleUser
-        }
+        },
+        setQuestions: (state, results) => {
+            state.questions = results.map((question) => {
+            // create a property and combine the correct and false answers to the object
+            question.answers = [ question.correct_answer, ...question.incorrect_answers ];
+                /* Shuffle question.answers array */
+                for (let i = question.answers.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [question.answers[i], question.answers[j]] = [
+                        question.answers[j],
+                        question.answers[i],
+                    ];
+                }
+                return question;
+            })
+        },
+        incrementRound: (state) => {
+            state.currentQuestion += 1;
+          },
+    },
+    getters: {
+        currentQuestion: state => {
+            return state.currentQuestion;
+        },
     },
     actions: {
         async fetchAllCategories({ commit }) {
@@ -82,6 +109,16 @@ export default createStore({
             }
             commit("setSingleUser", user)
             return null
-        }
+        },
+        async fetchQuestions({commit}) {
+            const [ error, results ] = await apiFetchQuestions();
+            
+            if(error !== null) {
+                return error;
+            }
+            
+            commit("setQuestions", results);
+            return null;
+        },
     }
 })
