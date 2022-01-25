@@ -5,6 +5,7 @@
 
     const store = useStore()
     onMounted(async () => {
+        await store.dispatch("getAllUsers")
         await store.dispatch("fetchAllCategories")
     });
     
