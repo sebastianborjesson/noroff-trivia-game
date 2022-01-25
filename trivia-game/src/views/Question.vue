@@ -12,7 +12,7 @@ onMounted(async() => {
 </script>
 
 <template>
-    <main class="container mx-auto px-4">
+    <!-- <main class="container mx-auto px-4">
         <QuestionItem />
-    </main>
+    </main> -->
 </template>
