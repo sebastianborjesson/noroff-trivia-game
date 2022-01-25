@@ -1,6 +1,9 @@
 <script setup>
     import { ref } from "vue";
+    import { useRouter } from "vue-router";
     import { useStore } from "vuex"
+
+    const router = useRouter()
 
     const store = useStore();
     const displayError = ref("")
@@ -9,10 +12,6 @@
     const selectedCategory = ref("")
     const trivia_difficulty = ref("")
     const trivia_amount = ref("")
-
-    const loggedUsers = ref([])
-    
-
 
     const storedCategories = ref([])
     store.subscribe((mutation, state) => {
@@ -26,38 +25,32 @@
     }
 
     function onStart() {
-        console.log(trivia_amount.value, selectedCategory.value, trivia_difficulty.value)
+        console.log("Username: ", username.value, "Amount: ", trivia_amount.value, "Category: ", selectedCategory.value, "Difficulty: ", trivia_difficulty.value)
         // Move to next
     }
+
    
     // Will get posted on API 
     const onRegisterSubmit = async () => {
-        
         const usernameExistCheck = await store.dispatch("getSingleUser", { username })
         if (usernameExistCheck !== null) {
             displayError.value = usernameExistCheck
         } else {
-            // If username already exists in loggedUsers
-            if(store.state.loggedUsers[0].username.toString().includes(username.value)) {
-                console.log("loggedUser contains: ", username.value)
+            const userAlreadyInAPI = store.state.loggedUsers.some(user => user.username === username.value)
+            if (userAlreadyInAPI) {
+                displayError.value = `Username: ${username.value} already exists.`
+            } else {
+                const error = await store.dispatch("registerUser", { username })
+                if (error !== null) {
+                    displayError.value = error
+                } else {
+                    // Register OK 
+                    // Create a link
+                    // router.push("/...")
+                }
             }
-           
-           
-           
-           // console.log("username.value: ", username.value) // FUNKAR
-            const checkUsernamesArray = store.state.loggedUsers.username
-            // console.log("checkUsernamesArray: ", checkUsernamesArray)
-            const checkUsernameArray = store.state.setSingleUser.username  // FUNKAR
-            console.log("checkUsernameArray: ", checkUsernameArray)
-            // console.log(store.state.setSingleUser.id)
-        }
-        // const error = await store.dispatch("registerUser", { username })
-        // if (error !== null) {
-        //     displayError.value = error;
-        // } else {
-            
-        // }
-    }    
+        } 
+    }
 </script>
 
 <template>
@@ -72,8 +65,6 @@
                 <input type="text" id="trivia_username" v-model="username" class="border border-slate-300"/>
             </fieldset>
         </form>
-        <!-- Check if Username is available -->
-        <button @click="onRegisterSubmit" type="submit" class="bg-indigo-500 text-white p-3 rounded">Enter Quiz Setup</button>
     </div>
 
     <div v-if="displayError" class="bg-red-500 text-white p-3 rounded">
@@ -109,6 +100,7 @@
             </fieldset>
         </form>
         <div>
+            <!-- onRegisterSubmit -->
             <button type="submit" @click="onStart" class="bg-indigo-500 text-white p-3 rounded">Start Game</button>
         </div>
     </div>      

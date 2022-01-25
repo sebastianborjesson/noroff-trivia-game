@@ -101,9 +101,6 @@ export default createStore({
             if (error !== null) {
                 return error
             }
-            for (const obj of loggedUsers) {
-                console.log(obj.username, obj.id)
-            }
             commit("setLoggedUsers", loggedUsers)
             return null
         },
