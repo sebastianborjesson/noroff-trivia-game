@@ -1,10 +1,18 @@
 <script setup>
-import DisplayQuestion from '../components/DisplayQuestion.vue';
+import { onMounted } from 'vue';
+import { useStore } from 'vuex';
+import QuestionItem from '../components/QuestionItem.vue';
+
+const store = useStore();
+onMounted(async() => {
+    await store.dispatch("fetchQuestions");
+})
+
 
 </script>
 
 <template>
     <main class="container mx-auto px-4">
-        <DisplayQuestion />
+        <QuestionItem />
     </main>
 </template>
