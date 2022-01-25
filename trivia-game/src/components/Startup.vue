@@ -1,6 +1,9 @@
 <script setup>
     import { ref } from "vue";
+    import { useRouter } from "vue-router";
     import { useStore } from "vuex"
+
+    const router = useRouter()
 
     const store = useStore();
     const displayError = ref("")
@@ -22,7 +25,7 @@
     }
 
     function onStart() {
-        console.log(username.value, trivia_amount.value, selectedCategory.value, trivia_difficulty.value)
+        console.log("Username: ", username.value, "Amount: ", trivia_amount.value, "Category: ", selectedCategory.value, "Difficulty: ", trivia_difficulty.value)
         // Move to next
     }
 
@@ -42,7 +45,8 @@
                     displayError.value = error
                 } else {
                     // Register OK 
-                    // Move onto rest
+                    // Create a link
+                    // router.push("/...")
                 }
             }
         } 
