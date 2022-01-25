@@ -10,7 +10,6 @@ const initUser = () => {
     }
     return JSON.parse(storedUser)
 }
-n
 
 
 export default createStore({
