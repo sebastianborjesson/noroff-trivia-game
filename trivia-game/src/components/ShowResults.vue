@@ -48,24 +48,35 @@ getScore();
 </script>
 
 <template>
-    <main >
-        <div class="grid grid-cols-2">
+    <main class="w-full h-screen bg-slate-300">
+        <div id="header">
+            <header>
+                <h1 class="font-bold text-4xl flex justify-center pt-5">
+                    You scored: {{ score }} points!
+                </h1>
+            </header>
+        </div>
+
+        <div class="grid grid-cols-2 justify-between">
             <div> 
-                <h1>Your Answers</h1>
+                <h1 class="font-bold text-xl flex justify-center pt-5">Your Answers</h1>
                 <ul id="userAnswers">
-                    <li v-for="answer in allUserAnswers" :key="answer.id">
+                    <li v-for="answer in allUserAnswers" :key="answer.id" class="flex justify-center">
                         {{ answer }}
                     </li>
                 </ul>
             </div>
             <div>
-                <h1>Correct Answers</h1>
+                <h1 class="font-bold text-xl flex justify-center pt-5" >Correct Answers</h1>
                 <ul id="correctAnswers">
-                    <li v-for="question in allUserQuestions" :key="question.id">
+                    <li v-for="question in allUserQuestions" :key="question.id" class="flex justify-center">
                         {{ question.correct_answer }}
                     </li>
                 </ul>
-            </div>
+            </div>        
+        </div>
+        <div class="flex justify-center items-center">
+            <button class="bg-indigo-500 text-white rounded text-2xl mt-5 w-1/4">Replay</button>            
         </div>
     </main>
 </template>
