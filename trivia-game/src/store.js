@@ -146,12 +146,13 @@ export default createStore({
             commit("setCurrentQuestion", [0])
             return null;
         },
-        async updateUserScore({ commit }, { userID, highScore }) {
-            const [ error, result ] = await apiUpdateUserScore(userID, highScore)
+        async updateUserScore({ commit, state }, highScore) {
+            console.log(state.user.id);
+            const [ error, result ] = await apiUpdateUserScore(state.user.id, highScore)
             if (error !== null) {
                 return error
             }
-            commit("setHighScore", result)
+            commit("setHighScore", highScore)
             return null
         }
     }

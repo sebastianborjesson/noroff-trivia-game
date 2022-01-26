@@ -9,9 +9,12 @@
     // const questions = computed(() => store.getters.questions)
     const allUserQuestions = store.getters.getQuestions;
     const allUserAnswers = store.getters.getUserAnswer;
+    const currentUser = store.getters.getUser
 
     
     let score = 0;  
+
+function getScore () {
 
     // Compare users answer with the correct answer
     for (let index = 0; index < allUserAnswers.length; index++) {
@@ -24,23 +27,25 @@
         }
     }
     store.commit("setHighScore", score);
+    updateScore();
+
+}
+const updateScore = async () => {
 
     // after do api call to check the users highScore! If > existing, update!
     if (score > 0) {
-        const currentUser = store.getters.getUser
         // console.log(store.getters.getUser.highScore)
-        if (store.getters.getHighScore > currentUser.highScore) {
+        
             // Updatera API user highscore
             // skriv över getUser highscore med currentUser highscore
             console.log()
             currentUser.highScore = score
-            console.log(currentUser.highScore)
-
-            const id = currentUser.id;
             const highScore = currentUser.highScore
-            await store.dispatch("updateUserScore", { id, highScore })
-        }
+            await store.dispatch("updateUserScore", highScore)
+        
     }
+        }
+getScore();
 </script>
 
 <template>
