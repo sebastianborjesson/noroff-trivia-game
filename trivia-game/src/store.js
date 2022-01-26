@@ -22,7 +22,7 @@ export default createStore({
         numberOfQuestion: "",
         questions: [],
         currentQuestion: {
-            question: '',
+            question: "",
             questionNumber: 0,
             answers: []
         },
