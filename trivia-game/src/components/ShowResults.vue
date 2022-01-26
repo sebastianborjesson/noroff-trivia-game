@@ -33,18 +33,16 @@ function getScore () {
 const updateScore = async () => {
 
     // after do api call to check the users highScore! If > existing, update!
-    if (score > 0) {
-        // console.log(store.getters.getUser.highScore)
-        
-            // Updatera API user highscore
-            // skriv över getUser highscore med currentUser highscore
-            console.log()
-            currentUser.highScore = score
-            const highScore = currentUser.highScore
-            await store.dispatch("updateUserScore", highScore)
+    if (score > 0 && currentUser.highScore < score) {
+        // Updatera API user highscore
+        // skriv över getUser highscore med currentUser highscore
+        console.log()
+        currentUser.highScore = score
+        const highScore = currentUser.highScore
+        await store.dispatch("updateUserScore", highScore)
         
     }
-        }
+}
 getScore();
 </script>
 
