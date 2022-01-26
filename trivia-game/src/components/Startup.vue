@@ -77,11 +77,11 @@
         </div>
 
         <div class="flex justify-center">
-            <form @submit.prevent="onSubmit" class="grid grid-cols-3">
+            <form @submit.prevent="onSubmit" class="grid grid-cols-2">
                 <fieldset class="mb-3 object-fill">
                     <label for="difficulty" aria-label="Difficulty" class="block">Select Difficulty: </label>
                     <select name="trivia_difficulty" class="border border-slate-300 w-full" v-model="trivia_difficulty">
-                        <option value="any">Any Difficulty</option>
+                        <option disabled value="">Any Difficulty</option>
                         <option value="easy">Easy</option>
                         <option value="medium">Medium</option>
                         <option value="hard">Hard</option>
@@ -96,9 +96,10 @@
                         </option>
                     </select>
                 </fieldset>
-                <button type="submit" @click="onRegisterSubmit" class="bg-indigo-500 text-white m-3 mt-1 rounded text-xl">Start Game</button>
             </form>
-
+        </div>
+        <div class="flex justify-center">
+            <button type="submit" @click="onRegisterSubmit" class="bg-indigo-500 text-white m-3 mt-1 rounded text-xl w-1/4">Start Game</button>
         </div>
         <div class="flex justify-center items-center">     
             <div v-if="displayError" class="bg-red-500 text-white p-3 rounded">
