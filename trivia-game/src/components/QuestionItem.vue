@@ -20,7 +20,6 @@ function answerQuestion(answer) {
         store.commit("setCurrentQuestion", [index.value + 1])
         userAnswer = answer;
         selectedAnswers.push(userAnswer);
-        console.log(selectedAnswers);
     }
 }
 
@@ -31,12 +30,12 @@ function answerQuestion(answer) {
         <div class="w-full max-w-xl p-3">
             <h1 class="font-bold text-5xl text-center text-indigo-700">Question: {{ index + 1 }}</h1>
             <div class="bg-white p-12 rounded-lg shadow-lg w-full mt-8" >
-                <p class="text-2xl font-bold">{{ currentQuestion.question }}</p>
+                <p class="text-2xl font-bold" v-html="currentQuestion.question"></p>
                 <div v-for="(answer, index) in currentQuestion.answers" :key="index">
-                    <input :value="answer"
+                    <button v-html="answer" :value="answer"
                     type="button"
                     class="block mt-4 border w-full text-left border-gray-300 rounded-lg py-2 px-6 text-lg"
-                    @click="answerQuestion(answer)">
+                    @click="answerQuestion(answer)"></button>
                 </div>
             </div>
         </div>
