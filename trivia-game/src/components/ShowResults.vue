@@ -10,8 +10,14 @@
     const allUserAnswers = store.getters.getUserAnswer;
     const currentUser = store.getters.getUser
 
+    const emit = defineEmits(["onRestartBtn"])
+
     
-    let score = 0;  
+    let score = 0;
+
+    const onReplaySubmit = async() => {
+        emit("onRestartBtn")
+    }
 
 function getScore () {
 
@@ -57,34 +63,34 @@ getScore();
             </header>
         </div>
 
-        <div class="grid grid-cols-3 justify-between">
-            <div>
-                <h1 class="font-bold text-xl flex justify-center pt-5" >Question</h1>
-                <ol id="actualQuestion">
-                    <li v-for="question in allUserQuestions" :key="question.id" class="flex m-5">
+        <div class="grid grid-rows-3">
+            <div class="">
+                <h1 class="font-bold text-xl flex justify-start p-5" >Question</h1>
+                <ol id="actualQuestion" class="grid grid-flow-col-dense">
+                    <li v-for="question in allUserQuestions" :key="question.id"  class="flex m-5">
                         {{ question.question }}
                     </li>
                 </ol>
             </div>
             <div> 
-                <h1 class="font-bold text-xl flex justify-center pt-5">Your Answers</h1>
-                <ol id="userAnswers">
-                    <li v-for="answer in allUserAnswers" :key="answer.id" class="flex justify-center ">
+                <h1 class="font-bold text-xl flex justify-start p-5">Your Answers</h1>
+                <ol id="userAnswers" class="grid grid-flow-col-dense">
+                    <li v-for="answer in allUserAnswers" :key="answer.id" class="flex m-5">
                         {{ answer }}
                     </li>
                 </ol>
             </div>
             <div class="flex flex-col">
-                <h1 class="font-bold text-xl flex justify-center pt-5" >Correct Answers</h1>
-                <ol id="correctAnswers">
-                    <li v-for="question in allUserQuestions" :key="question.id" class="flex justify-center">
+                <h1 class="font-bold text-xl flex justify-start p-5" >Correct Answers</h1>
+                <ol id="correctAnswers" class="grid grid-flow-col-dense">
+                    <li v-for="question in allUserQuestions" :key="question.id" class="flex m-5">
                         {{ question.correct_answer }}
                     </li>
                 </ol>
             </div>        
         </div>
         <div class="flex justify-center items-center">
-            <button class="bg-indigo-500 text-white rounded text-2xl mt-5 w-1/4">Replay</button>            
+            <button type="submit" @click="onReplaySubmit" class="bg-indigo-500 text-white rounded text-2xl mt-5 w-1/4">Replay</button>            
         </div>
     </main>
 </template>
