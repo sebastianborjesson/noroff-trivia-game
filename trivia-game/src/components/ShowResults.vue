@@ -26,17 +26,19 @@ function getScore () {
             console.log("Wrong answer!")
         }
     }
-    store.commit("setHighScore", score);
-    updateScore();
+    console.log(score);
+    updateScore(score);
 
 }
-const updateScore = async () => {
+const updateScore = async (score) => {
+    console.log(score)
+    console.log(currentUser.highScore);
 
     // after do api call to check the users highScore! If > existing, update!
-    if (score > 0 && currentUser.highScore < score) {
+    if (score >= 0 && currentUser.highScore < score) {
+        store.commit("setHighScore", score);
         // Updatera API user highscore
         // skriv över getUser highscore med currentUser highscore
-        console.log()
         currentUser.highScore = score
         const highScore = currentUser.highScore
         await store.dispatch("updateUserScore", highScore)
