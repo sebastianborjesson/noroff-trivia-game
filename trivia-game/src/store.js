@@ -17,7 +17,7 @@ export default createStore({
         user: initUser(), // Well username...
         categories: [],
         loggedUsers: [],
-        setSingleUser: "",                 
+        setSingleUser: {},                 
         question_diffuculty: "",
         numberOfQuestion: 0,
         questions: [],
@@ -60,8 +60,8 @@ export default createStore({
         setLoggedUsers: (state, loggedUsers) => {
             state.loggedUsers = loggedUsers
         },
-        setSingleUser: (state, setSingleUser) => {
-            state.setSingleUser = setSingleUser
+        setSingleUser: (state, user) => {
+            state.user = user
         },
         setQuestions: (state, results) => {
             state.questions = results
@@ -133,7 +133,7 @@ export default createStore({
             if (error !== null) {
                 return error
             }
-            commit("setSingleUser", user)
+            commit("setSingleUser", user[0])
             return null
         },
         async fetchQuestions({commit}, {numberOfQuestion, category, question_diffuculty}) {
@@ -146,12 +146,13 @@ export default createStore({
             commit("setCurrentQuestion", [0])
             return null;
         },
-        async updateUserScore({ commit }, { userID, highScore }) {
-            const [ error, result ] = await apiUpdateUserScore(userID, highScore)
+        async updateUserScore({ commit, state }, highScore) {
+            console.log(state.user.id);
+            const [ error, result ] = await apiUpdateUserScore(state.user.id, highScore)
             if (error !== null) {
                 return error
             }
-            commit("setHighScore", result)
+            commit("setHighScore", highScore)
             return null
         }
     }
