@@ -14,6 +14,8 @@ let selectedAnswers = [];
 
 function answerQuestion(answer) {
     if(index.value >= questionAmount.value.length - 1) {
+        userAnswer = answer
+        selectedAnswers.push(userAnswer)
         store.commit("setUserAnswers", selectedAnswers)
         router.push("/result");
     } else {

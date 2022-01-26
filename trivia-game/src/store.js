@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 import { apiFetchAllCategories } from "./api/index";
-import { apiGetAllUsers, apiGetSingleUser, apiUserRegister } from "./api/users"
+import { apiGetAllUsers, apiGetSingleUser, apiUpdateUserScore, apiUserRegister } from "./api/users"
 import { apiFetchQuestions } from "./api/questions";
 
 const initUser = () => {
@@ -27,8 +27,12 @@ export default createStore({
             answers: []
         },
         userAnswers: [],
+        highScore: 0
     },
     getters: {
+        getUser: (state) => {
+            return state.user;
+        },
         currentQuestionNumber: state => {
             return state.currentQuestionNumber;
         },
@@ -40,6 +44,9 @@ export default createStore({
         },
         getUserAnswer: (state) => {
             return state.userAnswers
+        },
+        getUserHighScore: (state) => {
+            return state.highScore
         }
     },
     mutations: {
@@ -78,6 +85,9 @@ export default createStore({
         setUserAnswers: (state, answer) => {
             state.userAnswers = answer
         },
+        setHighScore: (state, score) => {
+            state.user.highScore = score 
+        }
     },
     
     actions: {
@@ -136,5 +146,13 @@ export default createStore({
             commit("setCurrentQuestion", [0])
             return null;
         },
+        async updateUserScore({ commit }, { userID, highScore }) {
+            const [ error, result ] = await apiUpdateUserScore(userID, highScore)
+            if (error !== null) {
+                return error
+            }
+            commit("setHighScore", result)
+            return null
+        }
     }
 })

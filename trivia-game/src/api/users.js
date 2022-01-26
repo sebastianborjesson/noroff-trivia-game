@@ -19,18 +19,20 @@ export async function apiGetAllUsers() {
 
 export async function apiGetSingleUser(username){
     try {
-        const response = await fetch(`${apiURL}/trivia?username=${username.username.value}`)
+        const response = await fetch(`${apiURL}/trivia?username=${username}`)
         if (!response.ok) {
             throw new Error("Could not find user!") // => OK för att registrera
         }
         const data = await response.json()
+    
 
-        if (data.length > 1) {
-            // console.log("Length > 1 ", data[0])
-            return [ null, data[0] ]
-        } else {
-            return [ null, data ]
-        }
+        // if (data.length > 1) {
+        //     // console.log("Length > 1 ", data[0])
+        //     return [ null, data[0] ]
+        // } else {
+        //     return [ null, data ]
+        // }
+        return [ null, data ]
         // console.log("Length < 1", data)
     } catch (e) {
         return [ e.message, [] ]
@@ -63,9 +65,10 @@ export async function apiUserRegister(username) {
 // Updating an user
 // const userID = 1 // Update user with id 1
 
-export async function apiUpdateUserScore(userId, newhighScore) {
+export async function apiUpdateUserScore(userId, newHighScore) {
     try {
-        const response = await fetch(`${apiURL}/trivia/${userId}`, {
+
+        const config = {
             method: "PATCH",
             headers: {
                 "X-API-Key": apiKey,
@@ -73,18 +76,16 @@ export async function apiUpdateUserScore(userId, newhighScore) {
             },
             body: JSON.stringify({
                 // Provide new highScore
-                highScore: newhighScore
+                highScore: newHighScore
             })
-        })
-        .then(response => {
-            if(!response.ok) {
-                throw new Error("Could not update high score")
-            }
-            return response.json()
-        })
-        .then(updateUser => {
-            //updatedUser is the user with the Patched data
-        })
+        }
+
+        const response = await fetch(`${apiURL}/trivia/${userId}`, config)        
+        if(!response.ok) {
+            throw new Error("Could not update high score")
+        }
+        const data = await response.json()
+        return [null, data]
     } catch (error) {
         return error.message
     }
