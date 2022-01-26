@@ -6,12 +6,10 @@ export async function apiFetchAllCategories() {
         const response = await fetch(`${CATEGORY_URL}`);
 
         if (!response.ok) {
-            throw new Error("Could not find categories 🤨")
+            throw new Error("Could not find categories 🤔");
         }
-
         const data = await response.json();
-        
-        return [ null, data ]
+        return [ null, data ];
     } catch (e) {
         return [ e.message, [] ];
     }
