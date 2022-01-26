@@ -54,7 +54,7 @@ getScore();
 </script>
 
 <template>
-    <main class="w-full h-screen bg-slate-300">
+    <main class="bg-slate-300">
         <div id="header">
             <header>
                 <h1 class="font-bold text-3xl flex justify-center pt-5">
@@ -63,34 +63,33 @@ getScore();
             </header>
         </div>
 
-        <div class="grid grid-rows-3">
-            <div class="">
-                <h1 class="font-bold text-xl flex justify-start p-5" >Question</h1>
-                <ol id="actualQuestion" class="grid grid-flow-col-dense">
-                    <li v-for="question in allUserQuestions" :key="question.id"  class="flex m-5">
-                        {{ question.question }}
-                    </li>
-                </ol>
-            </div>
-            <div> 
-                <h1 class="font-bold text-xl flex justify-start p-5">Your Answers</h1>
-                <ol id="userAnswers" class="grid grid-flow-col-dense">
-                    <li v-for="answer in allUserAnswers" :key="answer.id" class="flex m-5">
-                        {{ answer }}
-                    </li>
-                </ol>
-            </div>
-            <div class="flex flex-col">
-                <h1 class="font-bold text-xl flex justify-start p-5" >Correct Answers</h1>
-                <ol id="correctAnswers" class="grid grid-flow-col-dense">
-                    <li v-for="question in allUserQuestions" :key="question.id" class="flex m-5">
-                        {{ question.correct_answer }}
-                    </li>
-                </ol>
-            </div>        
+        <div class="">
+            <div class="grid grid-rows-3 grid-flow-col gap-4">
+                <div class="row-start-1 row-end-4">
+                    <h1 class="font-bold text-xl flex justify-start p-5" >Question</h1>
+                    <ol type="1" id="actualQuestion">
+                        <li v-for="question in allUserQuestions" :key="question.id" v-html="question.question" :value="question.question" class="flex m-5">
+                        </li>
+                    </ol>
+                </div>
+                <div class="row-start-1 row-end-4">
+                    <h1 class="font-bold text-xl flex justify-start p-5">Your Answers</h1>
+                    <ol id="userAnswers" >
+                        <li v-for="answer in allUserAnswers" :key="answer.id" v-html="answer" :value="answer" class="flex m-5">
+                        </li>   
+                    </ol>
+                </div>
+                <div class="row-start-1 row-end-4">
+                    <h1 class="font-bold text-xl flex justify-start p-5" >Correct Answers</h1>
+                    <ol id="correctAnswers">
+                        <li v-for="question in allUserQuestions" :key="question.id"  v-html="question.correct_answer" :value="question.correct_answer" class="flex m-5">
+                        </li>
+                    </ol>
+                </div>
+            </div>       
         </div>
-        <div class="flex justify-center items-center">
-            <button type="submit" @click="onReplaySubmit" class="bg-indigo-500 text-white rounded text-2xl mt-5 w-1/4">Replay</button>            
+        <div class="flex justify-center mb-5">
+            <button type="submit" @click="onReplaySubmit" class="bg-indigo-500 text-white rounded text-2xl mt-5 w-1/4">Replay</button>           
         </div>
     </main>
 </template>

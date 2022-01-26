@@ -9,7 +9,7 @@ const store = useStore();
 </script>
 
 <template>
-    <main class="container mx-auto px-4">
+    <main class="container mx-auto px-4 bg-slate-300">
         <QuestionItem />
     </main>
 </template>
