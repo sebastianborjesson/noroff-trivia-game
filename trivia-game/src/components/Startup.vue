@@ -1,9 +1,7 @@
 <script setup>
     import { ref } from "vue";
-    import { useRouter } from "vue-router";
     import { useStore } from "vuex"
 
-    const router = useRouter()
 
     const store = useStore();
     const displayError = ref("")
@@ -22,10 +20,7 @@
         return selectedCategory.value
     }
 
-    // function onStart() {
-    //     console.log("Username: ", username.value, "Amount: ", trivia_amount.value, "Category: ", selectedCategory.value, "Difficulty: ", trivia_difficulty.value)
-    //     // Move to next
-    // }
+    const emit = defineEmits(["startupSuccessful"]);
 
    
     // Will get posted on API 
@@ -42,14 +37,16 @@
                 if (error !== null) {
                     displayError.value = error
                 } else {
-                    // Register OK 
-                    // Create a link
-                    store.state.username = username.value
-                    store.state.trivia_amount = trivia_amount.value
-                    store.state.selectedCategory = selectedCategory.value
-                    store.state.trivia_difficulty = trivia_difficulty.value
-                    console.log(store.state.username, store.state.trivia_amount, store.state.selectedCategory, store.state.trivia_difficulty)
-                    // router.push("/questions")
+                    const category = selectedCategory.value;
+                    const numberOfQuestion = trivia_amount.value;
+                    const question_diffuculty = trivia_difficulty.value;
+
+                    const error = await store.dispatch("fetchQuestions", {numberOfQuestion, category, question_diffuculty})
+                    if (error !== null) {
+                        displayError.value = error;
+                    } else {
+                        emit("startupSuccessful")
+                    }
                 }
             }
         } 
