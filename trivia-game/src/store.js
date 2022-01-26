@@ -66,7 +66,6 @@ export default createStore({
                 const j = Math.floor(Math.random() * (i + 1));
                 [ answers[i], answers[j] ] = [ answers[j], answers[i] ];
             }
-
             state.currentQuestion.answers = answers;
         },
     },
