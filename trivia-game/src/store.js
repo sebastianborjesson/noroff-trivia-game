@@ -66,9 +66,12 @@ export default createStore({
             // Combine answers to one array and randomize where they populate
             let answers = [];
             answers = [ state.questions[questionNumber[0]].correct_answer, ...state.questions[questionNumber[0]].incorrect_answers ];
-            for (let i = answers.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [ answers[i], answers[j] ] = [ answers[j], answers[i] ];
+            if (answers.length > 2) {
+
+                for (let i = answers.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [ answers[i], answers[j] ] = [ answers[j], answers[i] ];
+                }
             }
             state.currentQuestion.answers = answers;
         },
