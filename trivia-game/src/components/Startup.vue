@@ -1,9 +1,7 @@
 <script setup>
     import { ref } from "vue";
-    import { useRouter } from "vue-router";
     import { useStore } from "vuex"
 
-    const router = useRouter()
 
     const store = useStore();
     const displayError = ref("")
@@ -19,15 +17,10 @@
     })
 
     function selectedCategoryInList() {
-        // console.log(selectedCategory.value)
-        // want to use this value to set category id
         return selectedCategory.value
     }
 
-    function onStart() {
-        console.log("Username: ", username.value, "Amount: ", trivia_amount.value, "Category: ", selectedCategory.value, "Difficulty: ", trivia_difficulty.value)
-        // Move to next
-    }
+    const emit = defineEmits(["startupSuccessful"]);
 
    
     // Will get posted on API 
@@ -44,9 +37,16 @@
                 if (error !== null) {
                     displayError.value = error
                 } else {
-                    // Register OK 
-                    // Create a link
-                    router.push("/questions")
+                    const category = selectedCategory.value;
+                    const numberOfQuestion = trivia_amount.value;
+                    const question_diffuculty = trivia_difficulty.value;
+
+                    const error = await store.dispatch("fetchQuestions", {numberOfQuestion, category, question_diffuculty})
+                    if (error !== null) {
+                        displayError.value = error;
+                    } else {
+                        emit("startupSuccessful")
+                    }
                 }
             }
         } 
@@ -54,7 +54,7 @@
 </script>
 
 <template>
-    <div id="app" class="">
+    <div id="app" class="border solid bg-slate-300 w-full h-screen">
         <!-- Header -->
         <div id="header">
             <header class="">
@@ -62,45 +62,45 @@
             </header>
         </div>
         <!-- userform and nrQuestions form -->
-        <div class="">
-            <form class="ml-3">
+        <div class="flex justify-center">
+            <form  class="ml-3 grid gap-1 grid-cols-2">
                 <fieldset class="mb-3">
                     <label for="username" aria-label="Username" class="block">Username</label>
                     <input type="text" id="trivia_username" v-model="username" class="border border-slate-300"/>
                 </fieldset>
                 
-                <fieldset>
-                    <label for="trivia_amount">Number of Questions:</label>
-                    <input type="number" name="trivia_amount" id="trivia_amount" v-model="trivia_amount" class="border border-slate-300">
+                <fieldset class="mb-3">
+                    <label for="trivia_amount" aria-label="Amount of questions" class="block">Number of Questions:</label>
+                    <input type="number" name="trivia_amount" id="trivia_amount" placeholder="10" v-model="trivia_amount" class="border border-slate-300">
                 </fieldset>
             </form>
         </div>
 
-        <div class="">
-            <form>
-                <fieldset>
-                    <label for="categories">Select Category: </label>
-                    <select name="categories" v-model="selectedCategory" @change="selectedCategoryInList" class="border border-slate-300">
-                        <option v-for="category in storedCategories" :key="category.id" :value="category.id">
-                            {{ category.name }}
-                        </option>
-                    </select>
-                </fieldset>
-
-                <fieldset>
-                    <label for="difficulty">Select Difficulty: </label>
-                    <select name="trivia_difficulty" class="border border-slate-300" v-model="trivia_difficulty">
+        <div class="flex justify-center">
+            <form @submit.prevent="onSubmit" class="grid grid-cols-3">
+                <fieldset class="mb-3 object-fill">
+                    <label for="difficulty" aria-label="Difficulty" class="block">Select Difficulty: </label>
+                    <select name="trivia_difficulty" class="border border-slate-300 w-full" v-model="trivia_difficulty">
                         <option value="any">Any Difficulty</option>
                         <option value="easy">Easy</option>
                         <option value="medium">Medium</option>
                         <option value="hard">Hard</option>
                     </select>
                 </fieldset>
+                
+                <fieldset class="mb-3">
+                    <label for="categories" aria-label="category" class="block">Select Category: </label>
+                    <select name="categories" v-model="selectedCategory" @change="selectedCategoryInList" class="border border-slate-300">
+                        <option v-for="category in storedCategories" :key="category.id" :value="category.id">
+                            {{ category.name }}
+                        </option>
+                    </select>
+                </fieldset>
+                <button type="submit" @click="onRegisterSubmit" class="bg-indigo-500 text-white m-3 mt-1 rounded text-xl">Start Game</button>
             </form>
 
-            <button type="submit" @click="onStart" class="bg-indigo-500 text-white p-3 rounded">Start Game</button>
         </div>
-        <div class="container">     
+        <div class="flex justify-center items-center">     
             <div v-if="displayError" class="bg-red-500 text-white p-3 rounded">
                 <span class="text-lg block mb-3">Error:</span>
                 <p>{{ displayError }}</p>
