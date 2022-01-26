@@ -26,6 +26,7 @@ export default createStore({
             questionNumber: 0,
             answers: []
         },
+        userAnswers: [],
     },
     getters: {
         currentQuestionNumber: state => {
@@ -37,6 +38,9 @@ export default createStore({
         getCurrentQuestion: (state) => {
             return state.currentQuestion
         },
+        getUserAnswer: (state) => {
+            return state.userAnswers
+        }
     },
     mutations: {
         setUser: (state, user) => {
@@ -67,6 +71,9 @@ export default createStore({
                 [ answers[i], answers[j] ] = [ answers[j], answers[i] ];
             }
             state.currentQuestion.answers = answers;
+        },
+        setUserAnswers: (state, answer) => {
+            state.userAnswers = answer
         },
     },
     

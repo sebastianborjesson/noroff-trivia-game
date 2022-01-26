@@ -10,14 +10,17 @@ const index = computed (() => currentQuestion.value.questionNumber)
 const questionAmount = computed(() => store.state.questions)
 
 let userAnswer = ref("");
+let selectedAnswers = [];
 
 function answerQuestion(answer) {
     if(index.value >= questionAmount.value.length - 1) {
+        store.commit("setUserAnswers", selectedAnswers)
         router.push("/result");
     } else {
         store.commit("setCurrentQuestion", [index.value + 1])
         userAnswer = answer;
-        console.log(userAnswer);
+        selectedAnswers.push(userAnswer);
+        console.log(selectedAnswers);
     }
 }
 

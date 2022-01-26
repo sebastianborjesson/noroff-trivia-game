@@ -4,9 +4,6 @@ import { useStore } from 'vuex';
 import QuestionItem from '../components/QuestionItem.vue';
 
 const store = useStore();
-onMounted(async() => {
-    await store.dispatch("fetchQuestions");
-})
 
 
 </script>
