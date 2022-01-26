@@ -19,7 +19,7 @@ export default createStore({
         loggedUsers: [],
         setSingleUser: "",                 
         question_diffuculty: "",
-        numberOfQuestion: "",
+        numberOfQuestion: 0,
         questions: [],
         currentQuestion: {
             question: "",
@@ -117,9 +117,8 @@ export default createStore({
             commit("setSingleUser", user)
             return null
         },
-        async fetchQuestions({commit}) {
-            const [ error, results ] = await apiFetchQuestions();
-            
+        async fetchQuestions({commit}, {numberOfQuestion, category, question_diffuculty}) {
+            const [ error, results ] = await apiFetchQuestions(numberOfQuestion, category, question_diffuculty);
             if(error !== null) {
                 return error;
             }
