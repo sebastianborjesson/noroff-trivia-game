@@ -22,35 +22,57 @@
 
     const emit = defineEmits(["startupSuccessful"]);
 
+
+    const onRegisterSubmit = async (user) => {
+        await store.dispatch("getAllUsers", user)
+        const userAlreadyInAPI = store.state.loggedUsers.some(user => user.username === username.value)
+        if(!userAlreadyInAPI) {
+            await store.dispatch("registerUser", { username })
+        } else {
+            await store.dispatch("getSingleUser", username.value);
+        }
+        const category = selectedCategory.value;
+        const numberOfQuestion = trivia_amount.value;
+        const question_diffuculty = trivia_difficulty.value;
+
+        const error = await store.dispatch("fetchQuestions", {numberOfQuestion, category, question_diffuculty})
+        if (error !== null) {
+            displayError.value = error;
+        } else {
+            emit("startupSuccessful")
+        }
+        
+        
+    }
    
     // Will get posted on API 
-    const onRegisterSubmit = async () => {
-        const usernameExistCheck = await store.dispatch("getSingleUser", { username })
-        if (usernameExistCheck !== null) {
-            displayError.value = usernameExistCheck
-        } else {
-            const userAlreadyInAPI = store.state.loggedUsers.some(user => user.username === username.value)
-            if (userAlreadyInAPI) {
-                displayError.value = `Username: ${username.value} already exists.`
-            } else {
-                const error = await store.dispatch("registerUser", { username })
-                if (error !== null) {
-                    displayError.value = error
-                } else {
-                    const category = selectedCategory.value;
-                    const numberOfQuestion = trivia_amount.value;
-                    const question_diffuculty = trivia_difficulty.value;
+    // const onRegisterSubmit = async () => {
+    //     const usernameExistCheck = await store.dispatch("getSingleUser", { username })
+    //     if (usernameExistCheck !== null) {
+    //         displayError.value = usernameExistCheck
+    //     } else {
+    //         const userAlreadyInAPI = store.state.loggedUsers.some(user => user.username === username.value)
+    //         if (userAlreadyInAPI) {
+    //             displayError.value = `Username: ${username.value} already exists.`
+    //         } else {
+    //             const error = await store.dispatch("registerUser", { username })
+    //             if (error !== null) {
+    //                 displayError.value = error
+    //             } else {
+    //                 const category = selectedCategory.value;
+    //                 const numberOfQuestion = trivia_amount.value;
+    //                 const question_diffuculty = trivia_difficulty.value;
 
-                    const error = await store.dispatch("fetchQuestions", {numberOfQuestion, category, question_diffuculty})
-                    if (error !== null) {
-                        displayError.value = error;
-                    } else {
-                        emit("startupSuccessful")
-                    }
-                }
-            }
-        } 
-    }
+    //                 const error = await store.dispatch("fetchQuestions", {numberOfQuestion, category, question_diffuculty})
+    //                 if (error !== null) {
+    //                     displayError.value = error;
+    //                 } else {
+    //                     emit("startupSuccessful")
+    //                 }
+    //             }
+    //         }
+    //     } 
+    // }
 </script>
 
 <template>
@@ -96,7 +118,7 @@
                         </option>
                     </select>
                 </fieldset>
-                <button type="submit" @click="onRegisterSubmit" class="bg-indigo-500 text-white m-3 mt-1 rounded text-xl">Start Game</button>
+                <button type="submit" @click="onRegisterSubmit(user)" class="bg-indigo-500 text-white m-3 mt-1 rounded text-xl">Start Game</button>
             </form>
 
         </div>

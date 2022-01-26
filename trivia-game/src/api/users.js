@@ -24,16 +24,8 @@ export async function apiGetSingleUser(username){
             throw new Error("Could not find user!") // => OK för att registrera
         }
         const data = await response.json()
-    
-
-        // if (data.length > 1) {
-        //     // console.log("Length > 1 ", data[0])
-        //     return [ null, data[0] ]
-        // } else {
-        //     return [ null, data ]
-        // }
+        console.log(data);
         return [ null, data ]
-        // console.log("Length < 1", data)
     } catch (e) {
         return [ e.message, [] ]
     }
